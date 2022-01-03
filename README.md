@@ -7,7 +7,9 @@ git clone git@github.com:thisWandiPratama/Skutang-App.git
 ```
 
 ## Install NPM
-```npm install
+
+```
+npm install
 ```
 
 ## Run App Debug to adroid
