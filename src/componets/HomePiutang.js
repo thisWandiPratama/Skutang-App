@@ -70,11 +70,11 @@ class HomePiutang extends React.Component {
                                 <ScrollView>
                                     <Text style={{ color: "#000", fontSize: 17, fontWeight: "bold" }}>Tambah Piutang</Text>
                                     <TextInput
-                                        placeholder='Contoh : Hutang 1'
+                                        placeholder='Contoh : Piutang 1'
                                         style={{ height: 50, borderBottomWidth: 1, borderBottomColor: "#999", marginBottom: 5 }}
                                     />
                                     <TextInput
-                                        placeholder='Nama Penghutang'
+                                        placeholder='Nama Pemberi Piutang'
                                         style={{ height: 50, borderBottomWidth: 1, borderBottomColor: "#999", marginBottom: 5 }}
                                     />
                                     <TextInput
