@@ -56,6 +56,13 @@ class HomeHutang extends React.Component {
                     <Text style={{ fontSize: 25, color: "#fff", fontWeight: "bold" }} >+</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} style={{ height: 60, width: 60,  alignItems: 'center', justifyContent: 'center', borderRadius: 40, position: "absolute", bottom: "12%", right: 12 }} >
+                   <Image
+                   source={{uri:"https://i.ibb.co/1MFWNFm/user.png"}}
+                   style={{height:60, width:60}}
+                   />
+                </TouchableOpacity>
+
                 <Modal
                     animationType="slide"
                     transparent={true}

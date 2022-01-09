@@ -1,10 +1,63 @@
 // imprt component
 import React from 'react'
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
 
 
 //class atau function component
 class Register extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            nama_lengkap: "",
+            email: "",
+            password: "",
+            no_whatsapp: "",
+            alamat: "",
+            isLoading: false
+        }
+    }
+
+
+    daftar = () => {
+        this.setState({ isLoading: true })
+        const { nama_lengkap, email, password, no_whatsapp, alamat } = this.state
+        let noAngka = parseInt(no_whatsapp)
+
+        fetch("https://golang-api-skutang.herokuapp.com/api/v1/auth/register", {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: nama_lengkap,
+                email: email,
+                password: password,
+                no_whatsapp: noAngka,
+                alamat: alamat,
+            }),
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                if (res.status === true) {
+                    this.setState({ isLoading: false })
+                    alert("Register Sukses!")
+                    this.props.navigation.goBack()
+                } else {
+                    this.setState({ isLoading: false })
+                    alert("Data Wajib Diisi / Kemungkinan Email Sudah Ada")
+                }
+
+            })
+            .catch(err => {
+                this.setState({ isLoading: false })
+                console.log(err)
+            })
+    }
+
+
     render() {
         return (
             // kumpulan component react native
@@ -67,6 +120,7 @@ class Register extends React.Component {
                             alignItems: 'center'
                         }}
                     >
+
                         <View
 
                             style={{
@@ -89,6 +143,7 @@ class Register extends React.Component {
                             />
                             <TextInput
                                 placeholder='Nama Lengkap'
+                                onChangeText={(nama_lengkap) => this.setState({ nama_lengkap: nama_lengkap })}
 
                             />
                         </View>
@@ -118,6 +173,7 @@ class Register extends React.Component {
                             />
                             <TextInput
                                 placeholder='Email'
+                                onChangeText={(email) => this.setState({ email: email })}
 
                             />
                         </View>
@@ -147,6 +203,7 @@ class Register extends React.Component {
                             />
                             <TextInput
                                 placeholder='Password'
+                                onChangeText={(password) => this.setState({ password: password })}
 
                             />
                         </View>
@@ -176,6 +233,7 @@ class Register extends React.Component {
                             />
                             <TextInput
                                 placeholder='No WhatsApp'
+                                onChangeText={(no_whatsapp) => this.setState({ no_whatsapp: no_whatsapp })}
 
                             />
                         </View>
@@ -205,36 +263,53 @@ class Register extends React.Component {
                             />
                             <TextInput
                                 placeholder='Alamat Lengkap'
-
+                                onChangeText={(alamat) => this.setState({ alamat: alamat })}
                             />
                         </View>
+
                     </View>
+                    {
+                        this.state.isLoading === true ?
+                            <View style={{
+                                backgroundColor: '#65C8D6',
+                                height: 50,
+                                width: '60%',
+                                borderRadius: 20,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderWidth: 1,
+                                borderColor: '#4CA28D',
+                                marginBottom: 100
+                            }}>
+                                <ActivityIndicator size={"large"} color="red" />
+                            </View>
+                            :
+                            <TouchableOpacity
+                                onPress={() => this.daftar()}
+                                style={{
+                                    backgroundColor: '#65C8D6',
+                                    height: 50,
+                                    width: '60%',
+                                    borderRadius: 20,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderWidth: 1,
+                                    borderColor: '#4CA28D',
+                                    marginBottom: 100
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        color: '#000',
+                                        fontWeight: 'bold'
+                                    }}
+                                >Daftar</Text>
+                            </TouchableOpacity>
+                    }
 
-                    <TouchableOpacity
-                        // onPress={}
-
-                        style={{
-                            backgroundColor: '#65C8D6',
-                            height: 50,
-                            width: '60%',
-                            borderRadius: 20,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderWidth: 1,
-                            borderColor: '#4CA28D',
-                            marginBottom: 100
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 20,
-                                color: '#000',
-                                fontWeight: 'bold'
-                            }}
-                        >Daftar</Text>
-                    </TouchableOpacity>
                 </View>
-            </View>
+            </View >
         )
     }
 }

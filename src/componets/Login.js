@@ -1,10 +1,55 @@
 // imprt component
 import React from 'react'
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
 
 
 //class atau function component
 class Login extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            email: "",
+            password: "",
+            isLoading: false
+        }
+    }
+
+
+    Login = () => {
+        this.setState({ isLoading: true })
+        const { email, password, } = this.state
+
+        fetch("https://golang-api-skutang.herokuapp.com/api/v1/auth/login", {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                if (res.status === true) {
+                    this.setState({ isLoading: false })
+                    alert("Login Sukses!")
+                    this.props.navigation.replace("Home")
+                } else {
+                    this.setState({ isLoading: false })
+                    alert("Data Wajib Diisi / Email / Password Salah")
+                }
+
+            })
+            .catch(err => {
+                this.setState({ isLoading: false })
+                console.log(err)
+            })
+    }
+
+
     render() {
         return (
             // kumpulan component react native
@@ -51,6 +96,7 @@ class Login extends React.Component {
                         />
                         <TextInput
                             placeholder='Masuk Email Anda'
+                            onChangeText={(email) => this.setState({email:email})}
 
                         />
                     </View>
@@ -80,15 +126,14 @@ class Login extends React.Component {
                         />
                         <TextInput
                             placeholder='Masuk Password Anda'
+                            onChangeText={(password) => this.setState({password:password})}
 
                         />
                     </View>
                 </View>
 
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.replace("Home")}
-
-                    style={{
+                {this.state.isLoading === true ? 
+                    <View style={{
                         backgroundColor: '#65C8D6',
                         height: 50,
                         width: '60%',
@@ -97,17 +142,33 @@ class Login extends React.Component {
                         justifyContent: 'center',
                         borderWidth: 1,
                         borderColor: '#4CA28D'
-                    }}
-                >
-                    <Text
-                        style={{
-                            fontSize: 20,
-                            color: '#000',
-                            fontWeight: 'bold'
-                        }}
-                    >Masuk</Text>
-                </TouchableOpacity>
+                    }}>
+                        <ActivityIndicator size={"large"} color="red" />
+                    </View>
+                    :
+                    <TouchableOpacity
+                        onPress={() => this.Login()}
 
+                        style={{
+                            backgroundColor: '#65C8D6',
+                            height: 50,
+                            width: '60%',
+                            borderRadius: 20,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderWidth: 1,
+                            borderColor: '#4CA28D'
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                color: '#000',
+                                fontWeight: 'bold'
+                            }}
+                        >Masuk</Text>
+                    </TouchableOpacity>
+    }
                 <View
                     style={{
                         flexDirection: 'row',
